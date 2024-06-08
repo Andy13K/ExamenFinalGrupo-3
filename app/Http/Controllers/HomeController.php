@@ -1,28 +1,18 @@
 <?php
 
+
 namespace App\Http\Controllers;
 
+use App\Models\Alumno;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
     public function index()
     {
-        return view('home');
+        // Obtener la lista de alumnos paginada
+        $alumnos = Alumno::paginate(100);
+        // Pasar la lista de alumnos a la vista home
+        return view('home', compact('alumnos'));
     }
 }
