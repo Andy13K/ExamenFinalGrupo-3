@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AlumnoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,11 +21,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-use App\Http\Controllers\AlumnoController;
-
+// Rutas para el controlador Alumno
 Route::resource('alumnos', AlumnoController::class);
