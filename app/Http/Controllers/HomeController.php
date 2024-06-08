@@ -13,6 +13,6 @@ class HomeController extends Controller
         // Obtener la lista de alumnos paginada
         $alumnos = Alumno::paginate(100);
         // Pasar la lista de alumnos a la vista home
-        return view('home', compact('alumnos'));
+        return view('alumnos.index', compact('alumnos'));
     }
 }

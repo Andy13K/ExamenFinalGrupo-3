@@ -1,69 +1,151 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Alumnos</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <title>Home - Lista de Alumnos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        .table thead th {
-            text-align: center;
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: whitesmoke;
+            color: #4a5568;
+            margin: 0;
+            padding: 20px;
         }
-        .table tbody td {
-            vertical-align: middle;
-            text-align: center;
-        }
-        .btn {
-            margin: 0 2px;
-        }
-        .success-message {
-            margin-top: 15px;
-        }
-        .page-header {
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
-        .btn-create {
-            background-color: #007bff;
-            color: white;
+        .title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ec0a0a;
         }
-        .btn-return {
-            background-color: #17a2b8;
-            color: white;
+        .buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center; /* Alinea verticalmente los elementos dentro de .buttons */
         }
-        .btn-edit {
-            background-color: #ffc107;
-            color: white;
+        .buttons a {
+            background-color: #a80f0f;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 650;
+            transition: background-color 0.3s, transform 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .btn-delete {
-            background-color: #dc3545;
-            color: white;
+        .buttons a:hover {
+            background-color: #aa152b;
         }
-        .btn-view {
-            background-color: #28a745;
-            color: white;
+        .buttons a:active {
+            transform: scale(0.95);
+        }
+        .logout-button {
+            background: none;
+            border: none;
+            color: #a80f0f;
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.3s, transform 0.3s;
+            display: flex;
+            align-items: center; /* Asegura que el ícono esté centrado verticalmente */
+        }
+        .logout-button:hover {
+            color: #aa152b;
+        }
+        .logout-button:active {
+            transform: scale(0.95);
+        }
+        .table-container {
+            overflow-y: auto;
+            max-height: 70vh;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .action-buttons {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .action-buttons a, .action-buttons button {
+            background-color: #f8f9fa;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .action-buttons a {
+            color: #28a745; /* Green color for edit */
+        }
+        .action-buttons button {
+            color: #dc3545; /* Red color for delete */
+        }
+        .action-buttons a:hover, .action-buttons button:hover {
+            background-color: #e2e6ea;
+        }
+        .action-buttons a:active, .action-buttons button:active {
+            transform: scale(0.95);
+        }
+        .action-buttons form {
+            display: inline;
+        }
+        .footer {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 10px 0;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+            text-align: center;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="page-header">
-        <h1>Lista de Alumnos</h1>
-        <a href="{{ route('alumnos.create') }}" class="btn btn-create">Crear Alumno</a>
+<div class="header">
+    <div class="title">Lista de Alumnos</div>
+    <div class="buttons">
+        <a href="{{ route('alumnos.create') }}">Crear Alumno</a>
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit" class="logout-button" title="Cerrar sesión"><i class="fas fa-power-off"></i></button>
+        </form>
     </div>
-    @if (session('success'))
-        <div class="alert alert-success success-message">
-            {{ session('success') }}
-        </div>
-    @endif
-    <table class="table table-bordered table-striped">
-        <thead class="thead-dark">
+</div>
+@if (session('success'))
+    <div>{{ session('success') }}</div>
+@endif
+<div class="table-container">
+    <table>
+        <thead>
         <tr>
             <th>ID</th>
-            <th>Carne</th>
+            <th>Carnet</th>
             <th>Nombre</th>
             <th>Correo Institucional</th>
             <th>Teléfono</th>
@@ -78,32 +160,22 @@
                 <td>{{ $alumno->nombre }}</td>
                 <td>{{ $alumno->correo_institucional }}</td>
                 <td>{{ $alumno->telefono }}</td>
-                <td>
-                    <a href="{{ route('alumnos.show', $alumno->id) }}" class="btn btn-view btn-sm">
-                        <i class="fas fa-eye"></i>
-                    </a>
-                    <a href="{{ route('alumnos.edit', $alumno->id) }}" class="btn btn-edit btn-sm">
-                        <i class="fas fa-edit"></i>
-                    </a>
-                    <form action="{{ route('alumnos.destroy', $alumno->id) }}" method="POST" style="display:inline;">
+                <td class="action-buttons">
+                    <a href="{{ route('alumnos.edit', $alumno->id) }}" title="Editar"><i class="fas fa-edit"></i></a>
+                    <form action="{{ route('alumnos.destroy', $alumno->id) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este alumno?');">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-delete btn-sm">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
+                        <button type="submit" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
                     </form>
                 </td>
             </tr>
         @endforeach
         </tbody>
     </table>
-    <div class="d-flex justify-content-center">
-        {{ $alumnos->links() }}
-    </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+<div class="footer">
+    &copy; 2024 Grupo No.3. Todos los derechos reservados.
+</div>
 </body>
 </html>
+

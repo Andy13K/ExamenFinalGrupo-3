@@ -9,7 +9,7 @@ class AlumnoController extends Controller
 {
     public function index()
     {
-        $alumnos = Alumno::paginate(100);
+        $alumnos = Alumno::all(); // Cambiado de paginate(10) a all()
         return view('alumnos.index', compact('alumnos'));
     }
 
@@ -55,3 +55,4 @@ class AlumnoController extends Controller
         return redirect()->route('alumnos.index')->with('success', 'Alumno eliminado exitosamente.');
     }
 }
+
