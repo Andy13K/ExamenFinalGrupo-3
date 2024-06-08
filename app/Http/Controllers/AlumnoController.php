@@ -1,6 +1,6 @@
 <?php
 
-// app/Http/Controllers/AlumnoController.php
+
 namespace App\Http\Controllers;
 
 use App\Models\Alumno;
